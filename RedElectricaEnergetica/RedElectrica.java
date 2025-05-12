@@ -1,15 +1,8 @@
-package RedElectricaEnergetica;
+import java.util.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
- 
-
- 
 // Clase principal y única
 public class RedElectrica {
- 
+
     // Método para mostrar el menú de opciones
     public static void mostrarMenu() {
         System.out.println("\n===== MENÚ DE GESTIÓN DE RED ELÉCTRICA =====");
@@ -23,7 +16,7 @@ public class RedElectrica {
         System.out.println("8. Salir");
         System.out.print("Seleccione una opción: ");
     }
- 
+
     // Método para iniciar el menú y la interacción con el usuario
     public static void iniciarMenu(Grafo grafo) {
         Scanner scanner = new Scanner(System.in); // Scanner para leer la entrada del usuario
@@ -33,15 +26,15 @@ public class RedElectrica {
         SimuladorConsumo simuladorConsumo = null; // Simulador de consumo (inicialmente null)
         boolean fallosIniciados = false;
         boolean consumoIniciado = false;
- 
+
         for (String nombre : grafo.getNodos())
-            lista.agregar(grafo.getNodo(nombre));
- 
+            lista.agregar(nombre);
+
         // Bucle principal del menú
         while (true) {
             mostrarMenu(); // Muestra el menú
             String opcion = scanner.nextLine(); // Lee la opción del usuario
- 
+
             switch (opcion) {
                 case "1": // Calcular ruta de menor pérdida (Dijkstra)
                     System.out.print("Ingrese el nodo de inicio para calcular la ruta: ");
@@ -54,7 +47,7 @@ public class RedElectrica {
                         System.out.println("❌ El nodo '" + inicioDijkstra + "' no existe en el grafo.");
                     }
                     break;
- 
+
                 case "2": // Análisis global de la red (Floyd-Warshall)
                     List<String> nodosFW = new ArrayList<>(grafo.getNodos());
                     if (!nodosFW.isEmpty()) {
@@ -74,7 +67,7 @@ public class RedElectrica {
                         System.out.println("⚠️ El grafo está vacío, no se puede ejecutar Floyd-Warshall.");
                     }
                     break;
- 
+
                 case "3": // Detectar pérdidas económicas negativas (Bellman-Ford)
                     System.out.print("Ingrese el nodo de inicio para detectar ciclos negativos: ");
                     String inicioBellmanFord = scanner.nextLine().toUpperCase();
@@ -88,7 +81,7 @@ public class RedElectrica {
                         System.out.println("❌ El nodo '" + inicioBellmanFord + "' no existe en el grafo.");
                     }
                     break;
- 
+
                 case "4": // Iniciar/Detener simulación de fallos
                     if (!fallosIniciados) {
                         simuladorFallos = new SimuladorFallos(grafo, alertas);
@@ -103,7 +96,7 @@ public class RedElectrica {
                         System.out.println("\n🛑 Simulación de fallos detenida.");
                     }
                     break;
- 
+
                 case "5": // Iniciar/Detener simulación de consumo
                     if (!consumoIniciado) {
                         simuladorConsumo = new SimuladorConsumo(grafo);
@@ -118,47 +111,47 @@ public class RedElectrica {
                         System.out.println("\n🛑 Simulación de consumo detenida.");
                     }
                     break;
- 
-                case "6": // Ver y procesar alertas
-                    System.out.println("\n🚨 --- Alertas del Sistema ---");
-                    if (alertas.hayAlertas()) {
-                        while (alertas.hayAlertas()) {
-                            System.out.println("  > " + alertas.procesarAlerta().getMensaje());
-                        }
-                    } else {
-                        System.out.println("  ✅ No hay alertas pendientes.");
-                        System.out.print("¿Desea generar una alerta manual? (s/n): ");
-                        String resp = scanner.nextLine();
-                        if (resp.equalsIgnoreCase("s")) {
-                            System.out.print("Ingrese mensaje de alerta: ");
-                            String msg = scanner.nextLine();
-                            alertas.agregarAlerta(msg);
-                            System.out.println("  ✅ Alerta agregada.");
-                        }
-                    }
-                    System.out.println("--------------------------");
-                    break;
- 
+
+case "6": // Ver y procesar alertas
+    System.out.println("\n🚨 --- Alertas del Sistema ---");
+    if (alertas.hayAlertas()) {
+        while (alertas.hayAlertas()) {
+            System.out.println("  > " + alertas.procesarAlerta()); // Eliminado `.getMensaje()`
+        }
+    } else {
+        System.out.println("  ✅ No hay alertas pendientes.");
+        System.out.print("¿Desea generar una alerta manual? (s/n): ");
+        String resp = scanner.nextLine();
+        if (resp.equalsIgnoreCase("s")) {
+            System.out.print("Ingrese mensaje de alerta: ");
+            String msg = scanner.nextLine();
+            alertas.agregarAlerta(msg);
+            System.out.println("  ✅ Alerta agregada.");
+        }
+    }
+    System.out.println("--------------------------");
+    break;
+
                 case "7": // Ver nodos activos
                     System.out.println("\n🟢 --- Nodos Activos ---");
                     lista.imprimir();
                     System.out.println("----------------------");
                     break;
- 
+
                 case "8": // Salir
                     System.out.println("\n👋 Cerrando sistema...");
                     if (consumoIniciado && simuladorConsumo != null) simuladorConsumo.detener();
                     if (fallosIniciados && simuladorFallos != null) simuladorFallos.detener();
                     scanner.close();
                     return;
- 
+
                 default:
                     System.out.println("\n❌ Opción inválida. Por favor, seleccione una opción del menú.");
             }
             System.out.println(); // Añadir una línea en blanco para mejor legibilidad entre iteraciones
         }
     }
- 
+
     // ---------- MAIN ----------
     // Método principal, punto de entrada del programa
     public static void main(String[] args) {
@@ -171,7 +164,7 @@ public class RedElectrica {
         grafo.agregarArista("B", "A", -3);
         grafo.agregarArista("B", "C", 3);
         grafo.agregarArista("A", "C", 10);
- 
+
         iniciarMenu(grafo); // Llama al método para iniciar el menú y la interacción con el usuario
     }
 }

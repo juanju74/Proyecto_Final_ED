@@ -1,19 +1,18 @@
-package RedElectricaEnergetica;
 
 import java.util.Random;
 
 class SimuladorConsumo extends Thread {
     private Grafo grafo;
     private boolean ejecutando = true;
- 
+
     public SimuladorConsumo(Grafo grafo) {
         this.grafo = grafo;
     }
- 
+
     public void detener() {
         ejecutando = false;
     }
- 
+
     @Override
     public void run() {
         Random random = new Random();

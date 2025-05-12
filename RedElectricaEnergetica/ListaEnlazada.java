@@ -1,18 +1,18 @@
-package RedElectricaEnergetica;
+
 
 class ListaEnlazada {
     private static class Nodo {
         String nombre;
         Nodo siguiente;
- 
+
         Nodo(String nombre) {
             this.nombre = nombre;
             this.siguiente = null;
         }
     }
- 
+
     private Nodo cabeza;
- 
+
     public void agregar(String nombre) {
         Nodo nuevo = new Nodo(nombre);
         if (cabeza == null) {
@@ -25,7 +25,7 @@ class ListaEnlazada {
             temp.siguiente = nuevo;
         }
     }
- 
+
     public void imprimir() {
         Nodo temp = cabeza;
         while (temp != null) {

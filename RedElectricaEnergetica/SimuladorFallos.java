@@ -1,20 +1,34 @@
-package RedElectricaEnergetica;
+import java.util.Random;
+import java.util.List;
+import java.util.ArrayList;
 
-import java.util.LinkedList;
-import java.util.Queue;
+class SimuladorFallos extends Thread {
+    private Grafo grafo;
+    private ColaAlertas alertas;
+    private boolean ejecutando = true;
 
-class ColaAlertas extends RedElectrica {
-    private Queue<String> alertas = new LinkedList<>();
- 
-    public void agregarAlerta(String mensaje) {
-        alertas.add(mensaje);
+    public SimuladorFallos(Grafo grafo, ColaAlertas alertas) {
+        this.grafo = grafo;
+        this.alertas = alertas;
     }
- 
-    public boolean hayAlertas() {
-        return !alertas.isEmpty();
+
+    public void detener() {
+        ejecutando = false;
     }
- 
-    public String procesarAlerta() {
-        return alertas.poll();
+
+    @Override
+    public void run() {
+        Random random = new Random();
+        while (ejecutando) {
+            try {
+                Thread.sleep(2000); // Simular fallos cada 2 segundos
+                // Convertir el conjunto de nodos en una lista
+                List<String> nodos = new ArrayList<>(grafo.getNodos());
+                String nodo = nodos.get(random.nextInt(nodos.size())); // Seleccionar un nodo aleatorio
+                alertas.agregarAlerta("Fallo detectado en el nodo: " + nodo);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }
     }
 }
