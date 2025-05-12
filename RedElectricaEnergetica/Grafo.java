@@ -9,6 +9,7 @@ import java.util.Set;
 public class Grafo {
     private Map<String, Nodo> nodos = new HashMap<>(); // Mapa para almacenar los nodos, la clave es el nombre del nodo
     private Map<String, Map<String, Double>> adyacencias = new HashMap<>();
+
     // Mapa para almacenar las conexiones (aristas) entre los nodos
     // La clave del primer mapa es el nodo de origen, y el valor es otro mapa
     // donde la clave es el nodo de destino y el valor es el peso de la arista (pérdidas)
